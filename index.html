@@ -40,7 +40,7 @@ body {
 #gameArea {
     position: relative;
     width: 100%;
-    height: 300px; /* separate space for heart */
+    height: 300px;
 }
 
 /* HEART */
@@ -84,6 +84,7 @@ button {
     100% { transform: translateX(0); }
 }
 
+/* CONFETTI */
 .confetti {
     position: fixed;
     width: 10px;
@@ -97,6 +98,41 @@ button {
         transform: translateY(100vh);
         opacity: 0;
     }
+}
+
+/* HIGHLIGHT TEXT */
+.highlight {
+    font-weight: bold;
+    font-size: 1.3em;
+    background: linear-gradient(90deg, #ff4da6, #ffd6ec);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 20px #ff99cc;
+    animation: glow 2s ease-in-out infinite alternate;
+    position: relative;
+}
+
+@keyframes glow {
+    0% { text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 20px #ff99cc; }
+    50% { text-shadow: 0 0 8px #fff, 0 0 15px #ff4da6, 0 0 30px #ff99cc; }
+    100% { text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 20px #ff99cc; }
+}
+
+/* SPARKLES */
+.sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.8;
+    pointer-events: none;
+    animation: sparkleFall 1s linear forwards;
+}
+
+@keyframes sparkleFall {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(40px) scale(0.5); opacity: 0; }
 }
 
 </style>
@@ -175,7 +211,8 @@ function sayYes() {
         <div class="fade">
             <h1>You already are the main character for me ❤️‍🔥</h1>
             <p id="slideText" style="opacity:0; transform:translateY(20px); transition:all 1s ease;">
-                and always have been, my Little flame-haired Queen
+                and always have been, <span class="highlight">my Little flame-haired Queen</span>
+                <span id="sparkles"></span>
             </p>
         </div>
     `;
@@ -185,14 +222,11 @@ function sayYes() {
         let text = document.getElementById("slideText");
         text.style.opacity = "1";
         text.style.transform = "translateY(0)";
+        launchTextSparkles(); // запускаем блёстки
     }, 1200);
 }
 
-function revealSpoiler() {
-    let spoiler = document.getElementById("spoiler");
-    spoiler.style.color = "white";
-}
-
+/* CONFETTI */
 function launchConfetti() {
     for (let i = 0; i < 80; i++) {
         let confetti = document.createElement("div");
@@ -208,6 +242,27 @@ function launchConfetti() {
 function randomColor() {
     const colors = ["#ff4da6", "#ffd6ec", "#ffffff", "#ff99cc"];
     return colors[Math.floor(Math.random() * colors.length)];
+}
+
+/* SPARKLES FOR TEXT */
+function launchTextSparkles() {
+    const text = document.querySelector(".highlight");
+    for (let i = 0; i < 15; i++) {
+        let sparkle = document.createElement("div");
+        sparkle.classList.add("sparkle");
+
+        // случайное положение над текстом
+        let rect = text.getBoundingClientRect();
+        let x = Math.random() * rect.width;
+        let y = Math.random() * rect.height / 2;
+        sparkle.style.left = x + "px";
+        sparkle.style.top = y + "px";
+
+        text.appendChild(sparkle);
+
+        // удаляем через 1 секунду
+        setTimeout(() => sparkle.remove(), 1000);
+    }
 }
 
 </script>
