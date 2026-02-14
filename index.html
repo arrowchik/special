@@ -83,17 +83,18 @@ button {
     to { transform: translateY(100vh); opacity: 0; }
 }
 
-/* HIGHLIGHT TEXT - ВАРИАНТ 1 */
 .highlight {
     font-weight: bold;
     font-size: 1.3em;
-    background: linear-gradient(90deg, #ff3366, #ff99cc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 5px #fff, 0 0 8px #ff3366, 0 0 15px #ff66aa;
-    animation: glow 2s ease-in-out infinite alternate;
+    color: #ff3366;
+    text-shadow:
+        0 0 3px #fff,
+        0 0 5px #ff66aa,
+        0 0 10px #ff99cc,
+        0 0 15px #ff3366;
     position: relative;
 }
+
 
 @keyframes glow {
     0% { text-shadow: 0 0 5px #fff, 0 0 8px #ff3366, 0 0 15px #ff66aa; }
