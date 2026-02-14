@@ -174,15 +174,18 @@ function sayYes() {
     stage.innerHTML = `
         <div class="fade">
             <h1>You already are the main character for me ❤️‍🔥</h1>
-            
-            <p id="spoiler" 
-               style="background:#ff4da6; color:#ff4da6; display:inline-block; padding:6px 12px; border-radius:8px; cursor:pointer;"
-               onclick="revealSpoiler()">
-               and always have been
+            <p id="slideText" style="opacity:0; transform:translateY(20px); transition:all 1s ease;">
+                and always have been
             </p>
         </div>
     `;
     launchConfetti();
+
+    setTimeout(() => {
+        let text = document.getElementById("slideText");
+        text.style.opacity = "1";
+        text.style.transform = "translateY(0)";
+    }, 800);
 }
 
 function revealSpoiler() {
