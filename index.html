@@ -7,7 +7,6 @@
 
 <style>
 
-/* ------------------ BASIC STYLING ------------------ */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -20,7 +19,6 @@ body {
     text-align: center;
 }
 
-/* ------------------ FADE IN ANIMATION ------------------ */
 .fade {
     animation: fadeIn 1s ease forwards;
 }
@@ -30,15 +28,30 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ------------------ HEART (STAGE 1) ------------------ */
+/* TEXT CONTAINER */
+#stage {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+}
+
+/* GAME AREA (heart moves only here) */
+#gameArea {
+    position: relative;
+    width: 100%;
+    height: 300px; /* separate space for heart */
+}
+
+/* HEART */
 #heart {
     font-size: 80px;
     cursor: pointer;
     position: absolute;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 }
 
-/* ------------------ BUTTONS ------------------ */
+/* BUTTONS */
 button {
     padding: 12px 25px;
     font-size: 16px;
@@ -49,32 +62,28 @@ button {
     transition: transform 0.2s ease;
 }
 
-/* YES button */
 .yes {
     background-color: #ff4da6;
     color: white;
 }
 
-/* NO button */
 .no {
     background-color: white;
     color: #ff4da6;
 }
 
-/* ------------------ SHAKE EFFECT (NO vibration) ------------------ */
 .shake {
     animation: shake 0.4s;
 }
 
 @keyframes shake {
     0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
     100% { transform: translateX(0); }
 }
 
-/* ------------------ CONFETTI ------------------ */
 .confetti {
     position: fixed;
     width: 10px;
@@ -97,29 +106,31 @@ button {
 
 <div id="stage" class="fade">
     <h1>Catch your happiness 💖</h1>
-    <div id="heart">💖</div>
+    <div id="gameArea">
+        <div id="heart">💖</div>
+    </div>
 </div>
 
 <script>
 
-/* ------------------ STAGE CONTROL ------------------ */
 let stage = document.getElementById("stage");
 let heart = document.getElementById("heart");
+let gameArea = document.getElementById("gameArea");
 let clicks = 0;
 
-/* ------------------ HEART MOVEMENT ------------------ */
+/* BIGGER RANDOM MOVEMENT — but inside gameArea only */
 heart.addEventListener("click", () => {
     clicks++;
 
-    heart.style.left = Math.random() * 80 + "%";
-    heart.style.top = Math.random() * 80 + "%";
+    let maxX = gameArea.clientWidth - 80;
+    let maxY = gameArea.clientHeight - 80;
 
-    if (clicks >= 3) {
-        nextStage();
-    }
+    heart.style.left = Math.random() * maxX + "px";
+    heart.style.top = Math.random() * maxY + "px";
+
+    if (clicks >= 3) nextStage();
 });
 
-/* ------------------ TRANSITION TO QUESTION ------------------ */
 function nextStage() {
     stage.innerHTML = `
         <div class="fade">
@@ -131,14 +142,13 @@ function nextStage() {
     `;
 }
 
-/* ------------------ FIRST NO ------------------ */
 function firstNo(button) {
-    button.classList.add("shake");  /* vibration effect */
-    
+    button.classList.add("shake");
+
     setTimeout(() => {
         stage.innerHTML = `
             <div class="fade">
-                <h1>Are you absolutely sure? 😌</h1>
+                <h1>Are you absolutely sure? 😦</h1>
                 <button class="yes" onclick="sayYes()">Maybe not...</button>
                 <button class="no" onclick="finalNo(this)">Yes, I'm sure</button>
             </div>
@@ -146,9 +156,8 @@ function firstNo(button) {
     }, 400);
 }
 
-/* ------------------ SECOND NO ------------------ */
 function finalNo(button) {
-    button.classList.add("shake"); /* vibration again */
+    button.classList.add("shake");
 
     setTimeout(() => {
         stage.innerHTML = `
@@ -161,20 +170,16 @@ function finalNo(button) {
     }, 400);
 }
 
-/* ------------------ YES + CONFETTI ------------------ */
 function sayYes() {
-
     stage.innerHTML = `
         <div class="fade">
-            <h1>Officially unlocked 🎉</h1>
-            <h2>The main character role is yours.</h2>
+            <h1>You already are the main character for me 💖</h1>
+            <p>Pss... you always have been.</p>
         </div>
     `;
-
     launchConfetti();
 }
 
-/* ------------------ CONFETTI FUNCTION ------------------ */
 function launchConfetti() {
     for (let i = 0; i < 80; i++) {
         let confetti = document.createElement("div");
@@ -183,7 +188,6 @@ function launchConfetti() {
         confetti.style.backgroundColor = randomColor();
         confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
         document.body.appendChild(confetti);
-
         setTimeout(() => confetti.remove(), 5000);
     }
 }
