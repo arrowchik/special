@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Main Character</title>
+<title>Main Character - Variant 1</title>
 
 <style>
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -28,7 +27,6 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* TEXT CONTAINER */
 #stage {
     position: relative;
     width: 100%;
@@ -36,14 +34,12 @@ body {
     padding: 20px;
 }
 
-/* GAME AREA (heart moves only here) */
 #gameArea {
     position: relative;
     width: 100%;
     height: 300px;
 }
 
-/* HEART */
 #heart {
     font-size: 80px;
     cursor: pointer;
@@ -51,7 +47,6 @@ body {
     transition: all 0.25s ease;
 }
 
-/* BUTTONS */
 button {
     padding: 12px 25px;
     font-size: 16px;
@@ -62,19 +57,10 @@ button {
     transition: transform 0.2s ease;
 }
 
-.yes {
-    background-color: #ff4da6;
-    color: white;
-}
+.yes { background-color: #ff4da6; color: white; }
+.no { background-color: white; color: #ff4da6; }
 
-.no {
-    background-color: white;
-    color: #ff4da6;
-}
-
-.shake {
-    animation: shake 0.4s;
-}
+.shake { animation: shake 0.4s; }
 
 @keyframes shake {
     0% { transform: translateX(0); }
@@ -94,28 +80,25 @@ button {
 }
 
 @keyframes fall {
-    to {
-        transform: translateY(100vh);
-        opacity: 0;
-    }
+    to { transform: translateY(100vh); opacity: 0; }
 }
 
-/* HIGHLIGHT TEXT */
+/* HIGHLIGHT TEXT - ВАРИАНТ 1 */
 .highlight {
     font-weight: bold;
     font-size: 1.3em;
-    background: linear-gradient(90deg, #ff4da6, #ffd6ec);
+    background: linear-gradient(90deg, #ff3366, #ff99cc);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 20px #ff99cc;
+    text-shadow: 0 0 5px #fff, 0 0 8px #ff3366, 0 0 15px #ff66aa;
     animation: glow 2s ease-in-out infinite alternate;
     position: relative;
 }
 
 @keyframes glow {
-    0% { text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 20px #ff99cc; }
-    50% { text-shadow: 0 0 8px #fff, 0 0 15px #ff4da6, 0 0 30px #ff99cc; }
-    100% { text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 20px #ff99cc; }
+    0% { text-shadow: 0 0 5px #fff, 0 0 8px #ff3366, 0 0 15px #ff66aa; }
+    50% { text-shadow: 0 0 8px #fff, 0 0 12px #ff3366, 0 0 20px #ff66aa; }
+    100% { text-shadow: 0 0 5px #fff, 0 0 8px #ff3366, 0 0 15px #ff66aa; }
 }
 
 /* SPARKLES */
@@ -139,7 +122,6 @@ button {
 </head>
 
 <body>
-
 <div id="stage" class="fade">
     <h1>Catch your happiness 💖</h1>
     <div id="gameArea">
@@ -148,22 +130,17 @@ button {
 </div>
 
 <script>
-
 let stage = document.getElementById("stage");
 let heart = document.getElementById("heart");
 let gameArea = document.getElementById("gameArea");
 let clicks = 0;
 
-/* BIGGER RANDOM MOVEMENT — but inside gameArea only */
 heart.addEventListener("click", () => {
     clicks++;
-
     let maxX = gameArea.clientWidth - 80;
     let maxY = gameArea.clientHeight - 80;
-
     heart.style.left = Math.random() * maxX + "px";
     heart.style.top = Math.random() * maxY + "px";
-
     if (clicks >= 3) nextStage();
 });
 
@@ -180,7 +157,6 @@ function nextStage() {
 
 function firstNo(button) {
     button.classList.add("shake");
-
     setTimeout(() => {
         stage.innerHTML = `
             <div class="fade">
@@ -194,7 +170,6 @@ function firstNo(button) {
 
 function finalNo(button) {
     button.classList.add("shake");
-
     setTimeout(() => {
         stage.innerHTML = `
             <div class="fade">
@@ -217,16 +192,14 @@ function sayYes() {
         </div>
     `;
     launchConfetti();
-
     setTimeout(() => {
         let text = document.getElementById("slideText");
         text.style.opacity = "1";
         text.style.transform = "translateY(0)";
-        launchTextSparkles(); // запускаем блёстки
+        launchTextSparkles();
     }, 1200);
 }
 
-/* CONFETTI */
 function launchConfetti() {
     for (let i = 0; i < 80; i++) {
         let confetti = document.createElement("div");
@@ -244,28 +217,20 @@ function randomColor() {
     return colors[Math.floor(Math.random() * colors.length)];
 }
 
-/* SPARKLES FOR TEXT */
 function launchTextSparkles() {
     const text = document.querySelector(".highlight");
     for (let i = 0; i < 15; i++) {
         let sparkle = document.createElement("div");
         sparkle.classList.add("sparkle");
-
-        // случайное положение над текстом
         let rect = text.getBoundingClientRect();
         let x = Math.random() * rect.width;
         let y = Math.random() * rect.height / 2;
         sparkle.style.left = x + "px";
         sparkle.style.top = y + "px";
-
         text.appendChild(sparkle);
-
-        // удаляем через 1 секунду
         setTimeout(() => sparkle.remove(), 1000);
     }
 }
-
 </script>
-
 </body>
 </html>
